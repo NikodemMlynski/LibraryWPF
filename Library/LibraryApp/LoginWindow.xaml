@@ -1,0 +1,173 @@
+﻿<Window x:Class="LibraryApp.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="BookFlow - Login"
+        Height="650"
+        Width="1000"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Background="#FDF9F5">
+
+    <Grid>
+        <!-- Główny kontener -->
+        <Border Width="800"
+                Padding="30"
+                CornerRadius="15"
+                Background="#FDF9F5"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Effect="{DynamicResource DropShadow}">
+            <Grid>
+                <!-- LOGIN PANEL -->
+                <StackPanel x:Name="LoginPanel">
+                    <Image Source="/Images/bookflow_vertical.png" Width="200" Height="100" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Welcome to BookFlow"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               Foreground="#0B2B45"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,25"/>
+
+                    <TextBlock Text="Email" Foreground="#0B2B45" FontSize="20px" Padding="5" FontWeight="SemiBold" />
+                    <TextBox x:Name="LoginEmail"
+                             Height="40"
+                             FontSize="14"
+                             Padding="10"
+                             Margin="0,0,0,15"
+                             Background="#F3F8FC"
+                             BorderBrush="#45A7FF"
+                             BorderThickness="1"/>
+
+                    <TextBlock Text="Password" Foreground="#0B2B45" FontSize="20px" Padding="5" FontWeight="SemiBold" />
+                    <PasswordBox x:Name="LoginPassword"
+                                 Height="40"
+                                 FontSize="14"
+                                 Padding="10"
+                                 Margin="0,0,0,20"
+                                 Background="#F3F8FC"
+                                 BorderBrush="#45A7FF"
+                                 BorderThickness="1"/>
+                    <TextBlock x:Name="LoginError"
+                    Text=""
+                    Foreground="Red"
+                    FontSize="13"
+                    HorizontalAlignment="Center"
+                    Margin="0,0,0,10"/>
+                    <Button Content="Login"
+                            Height="45"
+                            Click="LoginButton_Click"
+                            FontSize="18"
+                            FontWeight="SemiBold"
+                            Foreground="White"
+                            Background="#45A7FF"
+                            BorderThickness="0"
+                            Margin="0,0,0,20"/>
+
+                    <TextBlock Text="Don’t have an account? Register"
+                               Foreground="#0B2B45"
+                               FontSize="13"
+                               HorizontalAlignment="Center"
+                               Cursor="Hand"
+                               TextDecorations="Underline"
+                               MouseLeftButtonUp="RegisterText_MouseLeftButtonUp"/>
+                </StackPanel>
+
+                <!-- REGISTER PANEL -->
+                <StackPanel x:Name="RegisterPanel" Visibility="Collapsed">
+                    <Image Source="/Images/bookflow_vertical.png" Width="200" Height="100" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Create a new account"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               Foreground="#0B2B45"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,25"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="0, 0,20, 0">
+                            <TextBlock Text="Name" Foreground="#0B2B45" FontSize="20px" Padding="5" FontWeight="SemiBold" />
+                            <TextBox x:Name="RegisterName"
+                             Height="40"
+                             FontSize="14"
+                             Padding="10"
+                             Margin="0,0,0,15"
+                             Background="#F3F8FC"
+                             BorderBrush="#45A7FF"
+                             BorderThickness="1"/>          
+
+                            <TextBlock Text="Email" Foreground="#0B2B45" FontSize="20px" Padding="5" FontWeight="SemiBold" />
+                            <TextBox x:Name="RegisterEmail"
+                             Height="40"
+                             FontSize="14"
+                             Padding="10"
+                             Margin="0,0,0,15"
+                             Background="#F3F8FC"
+                             BorderBrush="#45A7FF"
+                             BorderThickness="1"/>  
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Margin="20, 0, 0, 0">
+                            <TextBlock Text="Password" Foreground="#0B2B45" FontSize="20px" Padding="5" FontWeight="SemiBold" />
+                            <PasswordBox x:Name="RegisterPassword"
+                              Height="40"
+                              FontSize="14"
+                              Padding="10"
+                              Margin="0,0,0,15"
+                              Background="#F3F8FC"
+                              BorderBrush="#45A7FF"
+                              BorderThickness="1"/>
+
+                            <TextBlock Text="Repeat password" Foreground="#0B2B45" FontSize="20px" Padding="5" FontWeight="SemiBold" />
+                            <PasswordBox x:Name="RegisterRepeatPassword"
+                              Height="40"
+                              FontSize="14"
+                              Padding="10"
+                              Margin="0,0,0,10"
+                              Background="#F3F8FC"
+                              BorderBrush="#45A7FF"
+                              BorderThickness="1"/>
+
+                            <TextBlock x:Name="PasswordError"
+                                Text=""
+                                Foreground="Red"
+                                FontSize="13"
+                                HorizontalAlignment="Center"
+                                Margin="0,0,0,10"/>
+                        </StackPanel>
+                    </Grid>
+                    
+
+                  
+
+                    <Button Content="Register"
+                            Height="45"
+                            FontSize="18"
+                            FontWeight="SemiBold"
+                            Foreground="White"
+                            Background="#45A7FF"
+                            BorderThickness="0"
+                            Margin="0,0,0,20"
+                            Click="RegisterButton_Click"/>
+
+                    <TextBlock Text="Already have an account? Login"
+                               Foreground="#0B2B45"
+                               FontSize="13"
+                               HorizontalAlignment="Center"
+                               Cursor="Hand"
+                               TextDecorations="Underline"
+                               MouseLeftButtonUp="BackToLogin_MouseLeftButtonUp"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Efekt cienia -->
+        <Grid.Resources>
+            <DropShadowEffect x:Key="DropShadow"
+                              Color="Black"
+                              BlurRadius="15"
+                              ShadowDepth="2"
+                              Opacity="0.15"/>
+        </Grid.Resources>
+    </Grid>
+</Window>
