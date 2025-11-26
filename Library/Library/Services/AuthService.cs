@@ -10,42 +10,32 @@ namespace Library.Services
         private static readonly AuthService _instance = new AuthService();
         public static AuthService Instance => _instance;
 
-        private User _currentUser;
+        public object CurrentIdentity { get; private set; }
 
-        // Publiczna właściwość przechowująca zalogowanego użytkownika
-        public User CurrentUser
-        {
-            get => _currentUser;
-            private set
-            {
-                _currentUser = value;
-                // Możesz dodać zdarzenie, jeśli potrzebujesz odświeżania wielu elementów UI,
-                // ale dla prostego zarządzania oknami (Login/Dashboard) nie jest to konieczne.
-                OnUserChanged?.Invoke(this, EventArgs.Empty);
-            }
-        }
+        public UserRole CurrentRole { get; private set; } = UserRole.None;
 
-        public event EventHandler OnUserChanged;
+        public User CurrentUser => CurrentIdentity as User;
+        public Admin CurrentAdmin => CurrentIdentity as Admin;
+        public Librarian CurrentLibrarian => CurrentIdentity as Librarian;
 
-        // Prywatny konstruktor, aby wymusić użycie Singletona
         private AuthService() { }
 
-        // Metoda do ustawienia użytkownika po pomyślnym zalogowaniu
-        public void SetUser(User user)
+        public void SetSession(object identity, UserRole role)
         {
-            CurrentUser = user;
+            CurrentIdentity = identity;
+            CurrentRole = role;
         }
 
-        // Metoda wylogowania
         public void Logout()
         {
-            CurrentUser = null;
+            CurrentIdentity = null;
+            CurrentRole = UserRole.None;
         }
 
-        // Sprawdza, czy jest zalogowany użytkownik
         public bool IsLoggedIn()
         {
-            return CurrentUser != null;
+            return CurrentIdentity != null;
         }
+
     }
 }

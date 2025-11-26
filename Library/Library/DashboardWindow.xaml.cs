@@ -1,4 +1,4 @@
-﻿using Library.ViewModels;
+﻿using Library.ViewModels.Reader;
 using System.Windows;
 
 namespace Library
