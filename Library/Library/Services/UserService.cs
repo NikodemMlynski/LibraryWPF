@@ -16,11 +16,9 @@ namespace Library.Services
 
         public async Task<bool> RegisterUserAsync(string name, string email, string password)
         {
-            // Sprawdzenie czy użytkownik już istnieje
             if (await _context.Users.AnyAsync(u => u.Email == email))
                 return false;
 
-            // Hashowanie hasła (proste, możesz później dodać lepsze)
             var user = new User
             {
                 Name = name,
@@ -33,14 +31,30 @@ namespace Library.Services
             return true;
         }
 
-        public async Task<User> LoginUserAsync(string email, string password)
+        public async Task<(object identity, UserRole role)> LoginAsync(string email, string password)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null) return null;
+            var admin = await _context.Admins.FirstOrDefaultAsync(a => a.Username == email);
+            if (admin != null)
+            {
+                if (BCrypt.Net.BCrypt.Verify(password, admin.PasswordHash))
+                    return (admin, UserRole.Admin);
+            }
 
-            // Weryfikacja hasła
-            bool verified = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
-            return verified ? user : null;
+            var librarian = await _context.Librarians.FirstOrDefaultAsync(l => l.Email == email);
+            if (librarian != null)
+            {
+                if (BCrypt.Net.BCrypt.Verify(password, librarian.PasswordHash))
+                    return (librarian, UserRole.Librarian);
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user != null)
+            {
+                if (BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+                    return (user, UserRole.Reader);
+            }
+
+            return (null, UserRole.None);
         }
     }
 }

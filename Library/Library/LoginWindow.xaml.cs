@@ -21,6 +21,8 @@ namespace Library
         public LoginWindow()
         {
             InitializeComponent();
+            CreateAdmin();
+            CreateLibrarian();
         }
 
         private void RegisterText_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -111,29 +113,80 @@ namespace Library
 
             if (string.IsNullOrEmpty(emailTxt) || string.IsNullOrEmpty(passwordTxt))
             {
-                LoginError.Text = "Please enter email and password.";
+                LoginError.Text = "Please enter email and password";
                 return;
             }
 
-            // Próba zalogowania i pobranie obiektu User
-            var user = await _userService.LoginUserAsync(emailTxt, passwordTxt);
+            var result = await _userService.LoginAsync(emailTxt, passwordTxt);
 
-            if (user != null)
+            if (result.role != UserRole.None)
             {
                 LoginError.Text = "";
 
-                // Zapisz zalogowanego użytkownika w globalnym serwisie autoryzacji
-                AuthService.Instance.SetUser(user);
+                AuthService.Instance.SetSession(result.identity, result.role);
 
-                // Otwórz DashboardWindow
-                var dashboardWindow = new DashboardWindow();
-                dashboardWindow.Show();
-                this.Close(); // Zamknij okno logowania
+                Window nextWindow = null;
+
+                switch (result.role)
+                {
+                    case UserRole.Reader:
+                        nextWindow = new DashboardWindow();
+                        break;
+                    case UserRole.Librarian:
+                        nextWindow = new LibrarianDashboardWindow();
+                        break;
+                    case UserRole.Admin:
+                        nextWindow = new AdminDashboardWindow();
+                        break;
+                }
+
+                if (nextWindow != null)
+                {
+                    nextWindow.Show();
+                    this.Close();
+                }
             }
             else
             {
                 LoginError.Text = "Invalid credentials";
             }
         }
+        private async void CreateAdmin()
+        {
+            using (var context = new Library.Data.AppDbContext())
+            {
+                if (!context.Admins.Any()) 
+                {
+                    var admin = new Library.Models.Admin
+                    {
+                        Username = "SuperAdmin",
+                        Email = "admin@bookflow.com",
+                        PasswordHash = BCrypt.Net.BCrypt.HashPassword("asdf1234")
+                    };
+                    context.Admins.Add(admin);
+                    await context.SaveChangesAsync();
+                    MessageBox.Show("Admin created!");
+                }
+            }
+        }
+        private async void CreateLibrarian()
+        {
+            using (var context = new Library.Data.AppDbContext())
+            {
+                if (!context.Librarians.Any())
+                {
+                    var librarian = new Library.Models.Librarian
+                    {
+                        Name = "Tomek",
+                        Email = "admin@bookflow.com",
+                        PasswordHash = BCrypt.Net.BCrypt.HashPassword("asdf1234")
+                    };
+                    context.Librarians.Add(librarian);
+                    await context.SaveChangesAsync();
+                    MessageBox.Show("Librarian created!");
+                }
+            }
+        }
     }
+
 }

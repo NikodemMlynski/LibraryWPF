@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Library"
-        xmlns:vm="clr-namespace:Library.ViewModels"
-        xmlns:views="clr-namespace:Library.Views"
+        xmlns:vm="clr-namespace:Library.ViewModels.Reader"
+        xmlns:views="clr-namespace:Library.Views.Reader"
         mc:Ignorable="d"
         Title="BookFlow - Dashboard" 
         Height="700" 
@@ -97,21 +97,21 @@
                             Command="{Binding NavigateCommand}" 
                             CommandParameter="DashboardPageViewModel"
                             Padding="30 20"/>
-                    <Button Content="Lista Książek" Style="{StaticResource SidebarButton}" 
+                    <Button Content="Books" Style="{StaticResource SidebarButton}" 
                             Command="{Binding NavigateCommand}" 
                             CommandParameter="BookListPageViewModel"/>
 
-                    <Button Content="Twoje Wypożyczenia" Style="{StaticResource SidebarButton}" 
+                    <Button Content="Your rentals" Style="{StaticResource SidebarButton}" 
                             Command="{Binding NavigateCommand}" 
                             CommandParameter="UserRentalsPageViewModel"/>
 
-                    <Button Content="Profil Użytkownika" Style="{StaticResource SidebarButton}" 
+                    <Button Content="Profile" Style="{StaticResource SidebarButton}" 
                             Command="{Binding NavigateCommand}" 
                             CommandParameter="UserProfilePageViewModel"/>
                 </StackPanel>
 
                 <Button Grid.Row="1"
-                        Content="Wyloguj" 
+                        Content="Log out" 
                         Style="{StaticResource LogoutButton}" 
                         Margin="20 10 20 20"
                         Padding="20 20" Command="{Binding LogoutCommand}"/>
