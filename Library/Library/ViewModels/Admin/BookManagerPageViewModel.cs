@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Library.ViewModels.Shared; // Importujemy bazową logikę
 
 namespace Library.ViewModels.Admin
 {
-    public class BookManagerPageViewModel : BaseViewModel
+    // Dziedziczymy z ViewModelu bazowego
+    public class BookManagerPageViewModel : BookManagerBaseViewModel
     {
     }
 }
