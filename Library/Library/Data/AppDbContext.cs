@@ -9,6 +9,7 @@ namespace Library.Data
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Librarian> Librarians { get; set; }
         public DbSet<Book> Books { get; set; }
+        public DbSet<Rental> Rentals { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {

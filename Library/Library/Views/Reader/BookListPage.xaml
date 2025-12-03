@@ -4,15 +4,105 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <!-- Kontent strony Lista Książek -->
-    <Border Background="#FDF9F5" Margin="20">
-        <TextBlock Text="Book List"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   FontSize="64"
-                   FontWeight="ExtraBold"
-                   Foreground="#0B2B45"/>
-        <!-- Ciemny niebieski z MainWindow -->
-    </Border>
+             d:DesignHeight="600" d:DesignWidth="900">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+
+        <Style TargetType="DataGridCell">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="15 10"/>
+        </Style>
+        <Style x:Key="ContentCellElementStyle" TargetType="TextBlock">
+            <Setter Property="Padding" Value="15 10"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="#FDF9F5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="30 30 30 10">
+            <TextBlock Text="Dostępne Książki" FontSize="32" FontWeight="Bold" Foreground="#0B2B45"/>
+        </Grid>
+
+        <DataGrid Grid.Row="1" Margin="30 10 30 30"
+                  ItemsSource="{Binding Books}"
+                  AutoGenerateColumns="False" IsReadOnly="True"
+                  HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                  Background="White" BorderBrush="#E0E0E0">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Tytuł" Binding="{Binding Title}" Width="*" ElementStyle="{StaticResource ContentCellElementStyle}"/>
+                <DataGridTextColumn Header="Autor" Binding="{Binding Author}" Width="*" ElementStyle="{StaticResource ContentCellElementStyle}"/>
+                <DataGridTextColumn Header="Dostępna ilość" Binding="{Binding Quantity}" Width="150" ElementStyle="{StaticResource ContentCellElementStyle}"/>
+
+                <DataGridTemplateColumn Header="Akcje" Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Content="Wypożycz" Padding="15 8"
+                                        Background="#28a745" Foreground="White" 
+                                        BorderThickness="0" Cursor="Hand" FontWeight="SemiBold"
+                                        Command="{Binding DataContext.OpenRentModalCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="5"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid Grid.Row="0" Grid.RowSpan="2" Background="#80000000"
+              Visibility="{Binding IsModalVisible, Converter={StaticResource BoolToVis}}">
+
+            <Border Background="White" Width="400" VerticalAlignment="Center" CornerRadius="15" Padding="30">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.3"/>
+                </Border.Effect>
+
+                <StackPanel>
+                    <TextBlock Text="Planowany zwrot książki" FontSize="20" FontWeight="Bold" Margin="0 0 0 20" Foreground="#0B2B45"/>
+
+                    <TextBlock Text="Wybierz datę zwrotu:" Margin="0 0 0 5" Foreground="Gray"/>
+
+                    <DatePicker SelectedDate="{Binding SelectedReturnDate}" 
+                                Height="35" Margin="0 0 0 20"
+                                VerticalContentAlignment="Center"/>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Anuluj" Width="100" Height="35" Margin="0 0 10 0"
+                                Background="Transparent" BorderBrush="#CCC" BorderThickness="1"
+                                Command="{Binding CloseRentModalCommand}">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="5"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+
+                        <Button Content="Potwierdź" Width="120" Height="35"
+                                Background="#28a745" Foreground="White" BorderThickness="0" FontWeight="Bold"
+                                Command="{Binding ConfirmRentCommand}">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="5"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+    </Grid>
 </UserControl>
