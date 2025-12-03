@@ -9,7 +9,7 @@
           xmlns:viewsAdmin="clr-namespace:Library.Views.Admin"
         
         mc:Ignorable="d"
-        Title="AdminDashboardWindow" Height="500" Width="850">
+        Title="AdminDashboardWindow" Height="700" Width="1200">
     <Window.Resources>
         <DataTemplate DataType="{x:Type vmAdmin:DashboardPageViewModel}">
             <viewsAdmin:DashboardPage />
