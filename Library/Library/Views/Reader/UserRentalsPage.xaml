@@ -3,16 +3,148 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:Library.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <!-- Kontent strony Wypożyczenia Użytkownika -->
-    <Border Background="#FDF9F5" Margin="20">
-        <TextBlock Text="User Rentals"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   FontSize="64"
-                   FontWeight="ExtraBold"
-                   Foreground="#0B2B45"/>
-        <!-- Ciemny niebieski z MainWindow -->
-    </Border>
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <converters:WidthConverter x:Key="WidthConverter" />
+        <Style TargetType="ListViewItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <ContentPresenter/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid Background="#FdF9F5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="30 30 30 10">
+            <TextBlock Text="Your Rentals" FontSize="32" FontWeight="Bold" Foreground="#0B2B45" />
+        </Grid>
+
+        <ListView Grid.Row="1" Margin="30 10 30 30"
+                  ItemsSource="{Binding Rentals}"
+                  Background="Transparent"
+                  BorderThickness="0"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border Background="#FFFFE0" BorderBrush="#E0E0E0" BorderThickness="1" 
+                            CornerRadius="8" Padding="20" Margin="0 0 0 10" 
+                            Width="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=ActualWidth, ConverterParameter=10, Converter={StaticResource WidthConverter}}">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Top">
+                                <TextBlock Text="{Binding Book.Title}" FontSize="20" FontWeight="Bold" Foreground="#0B2B45" TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="{Binding RentalStatus}" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0 0 15 0" Foreground="#0B2B45"/>
+                                <TextBlock VerticalAlignment="Center" Foreground="Gray">
+                                    <Run Text="Expected Return Date: "/>
+                                    <Run Text="{Binding ExpectedReturnDate, StringFormat='yyyy-MM-dd'}"/>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="0 10 0 0">
+                                <TextBlock VerticalAlignment="Center" Foreground="Gray" Margin="0 0 20 0">
+                                    <Run Text="Rental Date: "/>
+                                    <Run Text="{Binding StartDate, StringFormat='yyyy-MM-dd HH:mm'}"/>
+                                </TextBlock>
+                                <TextBlock VerticalAlignment="Center" Foreground="Gray">
+                                    <Run Text="Return Date: "/>
+                                    <Run Text="{Binding EndDate, StringFormat='yyyy-MM-dd HH:mm'}"/>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10 0 0">
+
+                                <Button Content="return" Padding="10 5" Background="#28a745" Foreground="White"
+                                        BorderThickness="0" Cursor="Hand" FontWeight="SemiBold" Margin="0 0 10 0"
+                                        Command="{Binding DataContext.ReturnBookCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding .}">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="5"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+
+                                <Button Content="modify return date" Padding="10 5" Background="#28a745" Foreground="White"
+                                        BorderThickness="0" Cursor="Hand" FontWeight="SemiBold"
+                                        Command="{Binding DataContext.OpenEditReturnDateModalCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding .}">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="5"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Grid Grid.Row="0" Grid.RowSpan="2" Background="#80000000"
+              Visibility="{Binding IsModalVisible, Converter={StaticResource BoolToVis}}">
+            <Border Background="White" Width="400" VerticalAlignment="Center" CornerRadius="15" Padding="30">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.3"/>
+                </Border.Effect>
+
+                <StackPanel>
+                    <TextBlock Text="New expected return date" FontSize="20" FontWeight="Bold" Margin="0 0 0 20" Foreground="#0B2B45"/>
+                    <TextBlock Text="Choose return date:" Margin="0 0 0 5" Foreground="Gray" />
+                    <DatePicker SelectedDate="{Binding SelectedReturnDate}"
+                                Height="35" Margin="0 0 0 20"
+                                VerticalAlignment="Center"/>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Cancel" Width="100" Height="35" Margin="0 0 10 0"
+                                Background="Transparent" BorderBrush="#CCC" BorderThickness="1"
+                                Command="{Binding CloseEditReturnDateModalCommand}">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="5" />
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+
+                        <Button Content="Confirm" Width="120" Height="35"
+                                Background="#29a745" Foreground="White" BorderThickness="0" FontWeight="Bold"
+                                Command="{Binding ConfirmEditReturnCommand}">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="5"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
 </UserControl>

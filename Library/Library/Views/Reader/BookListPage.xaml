@@ -26,7 +26,7 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Margin="30 30 30 10">
-            <TextBlock Text="Dostępne Książki" FontSize="32" FontWeight="Bold" Foreground="#0B2B45"/>
+            <TextBlock Text="Available Books" FontSize="32" FontWeight="Bold" Foreground="#0B2B45"/>
         </Grid>
 
         <DataGrid Grid.Row="1" Margin="30 10 30 30"
@@ -36,15 +36,15 @@
                   Background="White" BorderBrush="#E0E0E0">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Tytuł" Binding="{Binding Title}" Width="*" ElementStyle="{StaticResource ContentCellElementStyle}"/>
-                <DataGridTextColumn Header="Autor" Binding="{Binding Author}" Width="*" ElementStyle="{StaticResource ContentCellElementStyle}"/>
-                <DataGridTextColumn Header="Dostępna ilość" Binding="{Binding Quantity}" Width="150" ElementStyle="{StaticResource ContentCellElementStyle}"/>
+                <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" ElementStyle="{StaticResource ContentCellElementStyle}"/>
+                <DataGridTextColumn Header="Author" Binding="{Binding Author}" Width="*" ElementStyle="{StaticResource ContentCellElementStyle}"/>
+                <DataGridTextColumn Header="Available amount" Binding="{Binding Quantity}" Width="150" ElementStyle="{StaticResource ContentCellElementStyle}"/>
 
-                <DataGridTemplateColumn Header="Akcje" Width="150">
+                <DataGridTemplateColumn Header="Actions" Width="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Content="Wypożycz" Padding="15 8"
+                                <Button Content="Rent" Padding="15 8"
                                         Background="#28a745" Foreground="White" 
                                         BorderThickness="0" Cursor="Hand" FontWeight="SemiBold"
                                         Command="{Binding DataContext.OpenRentModalCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -71,16 +71,16 @@
                 </Border.Effect>
 
                 <StackPanel>
-                    <TextBlock Text="Planowany zwrot książki" FontSize="20" FontWeight="Bold" Margin="0 0 0 20" Foreground="#0B2B45"/>
+                    <TextBlock Text="Expected return date" FontSize="20" FontWeight="Bold" Margin="0 0 0 20" Foreground="#0B2B45"/>
 
-                    <TextBlock Text="Wybierz datę zwrotu:" Margin="0 0 0 5" Foreground="Gray"/>
+                    <TextBlock Text="Choose return date:" Margin="0 0 0 5" Foreground="Gray"/>
 
                     <DatePicker SelectedDate="{Binding SelectedReturnDate}" 
                                 Height="35" Margin="0 0 0 20"
                                 VerticalContentAlignment="Center"/>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Content="Anuluj" Width="100" Height="35" Margin="0 0 10 0"
+                        <Button Content="Cancel" Width="100" Height="35" Margin="0 0 10 0"
                                 Background="Transparent" BorderBrush="#CCC" BorderThickness="1"
                                 Command="{Binding CloseRentModalCommand}">
                             <Button.Resources>
@@ -90,7 +90,7 @@
                             </Button.Resources>
                         </Button>
 
-                        <Button Content="Potwierdź" Width="120" Height="35"
+                        <Button Content="Confirm" Width="120" Height="35"
                                 Background="#28a745" Foreground="White" BorderThickness="0" FontWeight="Bold"
                                 Command="{Binding ConfirmRentCommand}">
                             <Button.Resources>

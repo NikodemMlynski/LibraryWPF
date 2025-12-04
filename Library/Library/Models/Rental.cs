@@ -18,5 +18,6 @@ namespace Library.Models
         public DateTime? ExpectedReturnDate { get; set; }
         public DateTime? EndDate { get; set; }
         public RentalStatus RentalStatus { get; set; }
+        public Book Book { get; set; }
     }
 }
