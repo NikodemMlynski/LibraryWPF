@@ -13,4 +13,12 @@ namespace Library.Models
         Librarian,
         Admin
     }
+    public enum RentalStatus
+    {
+        Active,
+        Overdue,
+        Returned,
+        LateReturned,
+        Reservated
+    }
 }
